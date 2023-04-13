@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Upload</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add some basic styling to the buttons */
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #uploadBtn {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #viewBtn {
+      background-color: #008CBA;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>File Upload</h1>
+  <p>Select a file to upload:</p>
+  <input type="file" id="fileInput">
+  <button id="uploadBtn">Upload</button>
+  <button id="viewBtn" onclick="openFilePage()">View Files</button>
+
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('File uploaded successfully!');
+        } else {
+          alert('Error uploading file.');
+        }
+      })
+      .catch(error => {
+        alert('Error uploading file.');
+        console.error(error);
+      });
+    }
+
+    function openFilePage() {
+      window.location.href = 'uploads.html';
+    }
+
+    const uploadBtn = document.getElementById('uploadBtn');
+    uploadBtn.addEventListener('click', uploadFile);
+  </script>
+</body>
+</html>
