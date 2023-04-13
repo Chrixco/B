@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Upload</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add some basic styling to the buttons */
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #uploadBtn {
+      background-color: #4CAF50;
+      color: white;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    #uploadBtn:not([disabled]) {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #viewBtn {
+      background-color: #008CBA;
+      color: white;
+    }
+    #progressBar {
+      width: 100%;
+      height: 10px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 20px;
+      display: none;
+    }
+    #progressBar .bar {
+      width: 0%;
+      height: 100%;
+      background-color: #4CAF50;
+      transition: width 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <h1>File Upload</h1>
+  <label for="fileInput">Select a file to upload:</label>
+  <input type="file" id="fileInput" accept=".pdf,.txt" onchange="onFileSelected(event)">
+  <button id="uploadBtn" disabled>Upload</button>
+  <button id="viewBtn" onclick="openFilePage()">View Files</button>
+  <div id="progressBar">
+    <div class="bar"></div>
+  </div>
+
+  <script>
+    function onFileSelected(event) {
+      const fileInput = event.target;
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('No file selected.');
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size exceeds the limit of 10MB.');
+        return;
+      }
+      const uploadBtn = document.getElementById('uploadBtn');
+      uploadBtn.removeAttribute('disabled');
+    }
+
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('No file selected.');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', file);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload');
+      xhr.upload.onprogress = function(event) {
+        const progress = (event.loaded / event.total) * 100;
+        const progressBar = document.getElementById('progressBar');
+        progressBar.style.display = 'block';
+        progressBar.querySelector('.bar').style.width = `${progress}%`;
+      };
+      xhr.onerror = function(event) {
+        alert('Error uploading file.');
+        console.error(event);
+      };
+      xhr.onload = function(event) {
+        if (xhr.status === 200) {
+          alert('File uploaded successfully!');
+        } else {          
+            alert('Error uploading file.');
+          console.error(event);
+        }
+      };
+      xhr.send(formData);
+    }
+
+    function openFilePage() {
+      window.location.href = 'uploads.html';
+    }
+
+    const uploadBtn = document.getElementById('uploadBtn');
+    uploadBtn.addEventListener('click', uploadFile);
+  </script>
+</body>
+</html>
+
+         
