@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
+  %}
   <form method="POST">
     <h3 align="center">Login</h3>
     <div class="form-group">
@@ -24,19 +21,9 @@
       />
       <br />
       <div align="center">
-        <button class="btn btn-dark" type="submit">Login</button>
-        <br /><br />
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <button class="btn btn-primary" type="submit">Login</button>
       </div>
     </div>
   </form>
-
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script>
-    function onSignIn(googleUser) {
-      var id_token = googleUser.getAuthResponse().id_token;
-      // Send the ID token to your backend server to authenticate the user
-      // using your preferred authentication method (e.g. JWT, session cookie).
-    }
-  </script>
-{% endblock %}
+  {% endblock %}
+  
